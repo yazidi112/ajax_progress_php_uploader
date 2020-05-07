@@ -1,64 +1,9 @@
 <html>
-
+<script src="https://code.jquery.com/jquery-3.5.0.min.js" integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ=" crossorigin="anonymous"></script>		
+<link rel="stylesheet" href="ajaxprogressup.css" />
 <body>
-	<a href="#" onclick="$('.upload').slideToggle()">Modifier la photo</a>
-	<div class="form-group upload" style="display:none">
-		 <p>
-			Selectionner la photo: <input type='file' id='_file' onchange="upload()">
-		</p>
-		<div class='progress_outer' id="progress_outer">
-			<div id='_progress' class='progress'></div>
-		</div>
-		<div id="message"></div>
-		<div id="file_uploaded"></div>
-		<input type="hidden" class="form-control" name="url" id="url" placeholder="L'adresse URL de fichier PDF">
-	</div>
-	<script src="https://code.jquery.com/jquery-3.5.0.min.js" integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ=" crossorigin="anonymous"></script>			
-	<script>
-			
-			_file           = document.getElementById('_file'), 
-			_progress       = document.getElementById('_progress');
-			_progress_outer = document.getElementById('_progress_outer');
-			_message        = document.getElementById('message');
-			_url            = document.getElementById('url');
-			_file_uploaded  = document.getElementById('file_uploaded');
-
-			var upload = function(){
-
-				if(_file.files.length === 0){
-					return;
-				}
-				_progress.style.width 	= 0 + '%';
-				progress_outer.style.display='block';
-				var data = new FormData();
-				data.append('file', _file.files[0]);
-
-				var request = new XMLHttpRequest();
-				request.onreadystatechange = function(){
-					if(request.readyState == 4){
-						try {
-							var resp = JSON.parse(request.response);
-						} catch (e){
-							var resp = {
-								status: 'error',
-								data: 'Unknown error occurred: [' + request.responseText + ']'
-							};
-						}
-						_message.innerHTML	        = resp.status + ': ' + resp.data;
-						_url.value		            = resp.url;
-						_file_uploaded.innerHTML    = "<a target='_blank' href='"+resp.url+"'>"+resp.url+"</a>";
-					}
-				};
-
-				request.upload.addEventListener('progress', function(e){
-					_progress.style.width 	= Math.ceil(e.loaded/e.total) * 100 + '%';
-				}, false);
-
-				request.open('POST', '{{ path('upload') }}');
-				request.send(data);
-			}
-
-			
-	</script>
+	<input type="text" class="ajaxprogressup" />
+		
+	<script src="ajaxprogressup.js"></script>
 </body>
 </html>
